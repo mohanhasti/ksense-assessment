@@ -1,0 +1,57 @@
+const res = {
+    "highRiskPatients": ["DEMO002","DEMO006","DEMO007","DEMO008","DEMO010","DEMO012",
+        "DEMO016","DEMO019","DEMO020","DEMO021","DEMO022",
+        "DEMO027","DEMO031","DEMO032","DEMO033","DEMO041","DEMO045","DEMO048"
+    ],//18
+    "feverPatients": ["DEMO005","DEMO008","DEMO009","DEMO012","DEMO021","DEMO023","DEMO037","DEMO038","DEMO047"],//7
+    "dataQualityIssues": ["DEMO004","DEMO005","DEMO007","DEMO023","DEMO024","DEMO035","DEMO036","DEMO043"],//8    
+
+    "ignore": ["DEMO001","DEMO003","DEMO009","DEMO014","DEMO013","DEMO015","DEMO017","DEMO018","DEMO025","DEMO026","DEMO028","DEMO029",
+        "DEMO030","DEMO034","DEMO037","DEMO038","DEMO039","DEMO040","DEMO042","DEMO044","DEMO046"
+    ]//20
+}
+
+const r = {
+    "highRiskPatients": [
+      "DEMO002",
+      "DEMO006",
+      "DEMO007",
+      "DEMO008",
+      "DEMO010",
+      "DEMO012",
+      "DEMO016",
+      "DEMO019",
+      "DEMO020",
+      "DEMO021",
+      "DEMO022",
+      "DEMO027",
+      "DEMO031",
+      "DEMO032",
+      "DEMO033",
+      "DEMO041",
+      "DEMO045",
+      "DEMO048"
+    ],//18
+    "feverPatients": [
+      "DEMO005",
+      "DEMO008",
+      "DEMO009",
+      "DEMO012",
+      "DEMO021",
+      "DEMO023",
+      "DEMO037",
+      "DEMO038",
+      "DEMO047"
+    ],//9
+    "dataQualityIssues": [
+      "DEMO004",
+      "DEMO005",
+      "DEMO007",
+      "DEMO023",
+      "DEMO024",
+      "DEMO035",
+      "DEMO036",
+      "DEMO043"
+    ],//8
+  }
+
