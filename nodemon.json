@@ -1,0 +1,9 @@
+{
+  "watch": ["app.js", "routes/", "views/", "public/"],
+  "ext": "js,json,ejs,css,html",
+  "ignore": ["node_modules/", ".git/", "*.log"],
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "delay": "1000"
+} 
