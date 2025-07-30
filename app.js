@@ -43,30 +43,46 @@ app.get("/fetch-data", async (req, res) => {
 });
 
 app.get("/risk-scorer", async (req, res) => {
-    const data = await fetchData();
-    const {patients, highRiskPatients, feverPatients, dataQualityIssues } = riskScorer(data);
-    const result = {highRiskPatients, feverPatients, dataQualityIssues };
-    // const result2 = res.json({patients});
-    return result;
+    try {
+        // First try to get data from the API
+        let data;
+        try {
+            data = await fetchData();
+            console.log("data: risk-scorer from API", typeof data, data?.length);
+        } catch (apiError) {
+            console.log("API Call failed,", apiError.message);
+        }
+        
+        if (!Array.isArray(data)) {
+            console.error("Data is not an array:", typeof data, data);
+            return res.status(500).json({ error: "Invalid data format" });
+        }
+        
+        const {patients, highRiskPatients, feverPatients, dataQualityIssues } = riskScorer(data);
+        const result = {highRiskPatients, feverPatients, dataQualityIssues };
+        res.json(result);
+    } catch (error) {
+        console.error("Error in risk-scorer endpoint:", error);
+        res.status(500).json({ error: "Failed to process risk scoring" });
+    }
 });
-app.post("/submit-assessment", async (req, res) => {
-    const data = await riskScorer();
-    const results = {
-        high_risk_patients: [data.highRiskPatients],
-        fever_patients: [data.feverPatients],
-        data_quality_issues: [data.dataQualityIssues]
-      };
-    //   console.log("results", results);
-    // try {
-    //     const response = await axios.get(`${API_URL}/patients`, {
-    //     headers: {
-    //         "X-API-Key": API_KEY,
-    //     },
-    //     });
-    //     res.json(response.data);
-    // } catch (error) {
-    //     res.status(500).json({ error: "Failed to fetch patients" });
-    // }
+
+app.get("/submit-assessment", async (req, res) => {
+    try {
+        const data = await fetchData();
+        if (!Array.isArray(data) || data.length === 0) {
+            return res.status(500).json({ error: "No patient data available" });
+        }
+        const results = riskScorer(data);
+        res.json({
+            high_risk_patients: results.highRiskPatients,
+            fever_patients: results.feverPatients,
+            data_quality_issues: results.dataQualityIssues
+        });
+    } catch (error) {
+        console.error("Error in /submit-assessment:", error);
+        res.status(500).json({ error: "Failed to process assessment" });
+    }
 });
 
 app.listen(port, () => {

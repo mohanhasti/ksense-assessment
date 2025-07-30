@@ -4,7 +4,7 @@ const API_URL = "https://assessment.ksensetech.com/api";
 const API_KEY = process.env.API_KEY;
 
 async function fetchDataWithRetry(page, limit) {
-    const retry = 3;
+    let retry = 3;
     while (retry > 0) {
         try {
             const response = await axios.get(
@@ -13,19 +13,32 @@ async function fetchDataWithRetry(page, limit) {
                     "X-API-Key": API_KEY,
                 }
             });
-        return response.data;
+            return response.data;
         } catch (error) {
             const statusCode = error?.response?.status;
             if (statusCode === 500 || statusCode === 503 || statusCode === 429) {
-                console.error("Error fetching data:", error);
-                await new Promise(delay => setTimeout(delay, 1000)); // set a delay if there is rate limit
+                console.error(`Error fetching data (attempt ${4 - retry}/3):`, error.message);
+                
+                // Handle rate limit exceeded specifically
+                if (statusCode === 429) {
+                    const retryAfter = error?.response?.data?.retry_after || 5;
+                    console.log(`Rate limit exceeded. Waiting ${retryAfter} seconds before retry...`);
+                    await new Promise(delay => setTimeout(delay, retryAfter * 1000));
+                } else {
+                    console.log(`Server error (${statusCode}). Waiting 1 second before retry...`);
+                    await new Promise(delay => setTimeout(delay, 1000));
+                }
+                
+                retry--;
+                if (retry === 0) {
+                    throw new Error(`Failed to fetch data after 3 retries for page ${page}`);
+                }
             } else {
                 throw error;
             }
         }
-        await new Promise(delay => setTimeout(delay, 1000)); // set a delay if there is rate limit
     }
-    throw new Error("Failed to fetch data after ${page} & ${retries} retry");
+    throw new Error(`Failed to fetch data after 3 retries for page ${page}`);
 }
 
 async function fetchData() {
