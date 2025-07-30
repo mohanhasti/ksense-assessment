@@ -1,0 +1,49 @@
+{
+    "success": true,
+    "message": "Assessment submitted successfully",
+    "requestId": "iad1::b5qjf-1753864946301-bfe509593886",
+    "results": {
+        "score": 100,
+        "percentage": 100,
+        "status": "PASS",
+        "breakdown": {
+            "high_risk": {
+                "score": 50,
+                "max": 50,
+                "correct": 20,
+                "submitted": 20,
+                "matches": 20
+            },
+            "fever": {
+                "score": 25,
+                "max": 25,
+                "correct": 9,
+                "submitted": 9,
+                "matches": 9
+            },
+            "data_quality": {
+                "score": 25,
+                "max": 25,
+                "correct": 8,
+                "submitted": 8,
+                "matches": 8
+            }
+        },
+        "feedback": {
+            "strengths": [
+                "✅ High-risk patients: Perfect score (20/20)",
+                "✅ Fever patients: Perfect score (9/9)",
+                "✅ Data quality issues: Perfect score (8/8)"
+            ],
+            "issues": []
+        },
+        "attempt_number": 2,
+        "max_attempts": 3,
+        "remaining_attempts": 1,
+        "is_personal_best": true,
+        "best_score": 100,
+        "best_attempt_number": 2,
+        "can_resubmit": true,
+        "processed_in_ms": 191
+    }
+}

@@ -3,11 +3,23 @@ function calcBpScore(bp) {
         return {score: 0, issue: 'Invalid BP format'};
 
     const [systolic, diastolic] = bp.split('/').map(Number);
-    if (systolic < 120 && diastolic < 80) return { score: 0 };
-    else if ((systolic >= 120 && systolic <= 129) && diastolic < 80) return { score: 1 };
-    else if ((systolic >= 130 && systolic <= 139) || (diastolic >= 80 && diastolic <=89)) return { score: 2 };
-    else if (systolic >= 140 || diastolic >= 90) return { score: 3 };
-    else return {score: 3, reason: 'Different risk category'};
+
+    // Score systolic
+    let systolicScore = 0;
+    if (systolic < 120) systolicScore = 0;
+    else if (systolic >= 120 && systolic <= 129) systolicScore = 1;
+    else if (systolic >= 130 && systolic <= 139) systolicScore = 2;
+    else if (systolic >= 140) systolicScore = 3;
+
+    // Score diastolic
+    let diastolicScore = 0;
+    if (diastolic < 80) diastolicScore = 0;
+    else if (diastolic >= 80 && diastolic <= 89) diastolicScore = 2;
+    else if (diastolic >= 90) diastolicScore = 3;
+
+    // Use the higher risk stage for scoring
+    const score = Math.max(systolicScore, diastolicScore);
+    return { score };
 }
 
 function calcTempScore(temp){
