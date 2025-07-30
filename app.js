@@ -67,18 +67,27 @@ app.get("/risk-scorer", async (req, res) => {
     }
 });
 
-app.get("/submit-assessment", async (req, res) => {
+app.post("/submit-assessment", async (req, res) => {
     try {
         const data = await fetchData();
         if (!Array.isArray(data) || data.length === 0) {
             return res.status(500).json({ error: "No patient data available" });
         }
-        const results = riskScorer(data);
-        res.json({
-            high_risk_patients: results.highRiskPatients,
-            fever_patients: results.feverPatients,
-            data_quality_issues: results.dataQualityIssues
+        const scores = riskScorer(data);
+        const results = {
+            high_risk_patients: scores.highRiskPatients,
+            fever_patients: scores.feverPatients,
+            data_quality_issues: scores.dataQualityIssues
+        };
+
+        const response = await axios.post(`${API_URL}/submit-assessment`, results, {
+            headers: {
+                "X-API-Key": API_KEY,
+                "Content-Type": "application/json",
+            },
         });
+        res.json(response.data);
+
     } catch (error) {
         console.error("Error in /submit-assessment:", error);
         res.status(500).json({ error: "Failed to process assessment" });
